@@ -21,6 +21,7 @@ return [
         'db_mysql' => ['ref'=>'mysql',],
         'db_s1' => ['ref'=>'swoole_test',],
         'db_s2' => ['ref'=>'swoole_test2',],
+        'redis' => ['ref'=>'local_redis',],
 
 
         // 错误
@@ -455,6 +456,7 @@ return [
 
         // redis
         [
+            'name'  => 'local_redis',
             // 类路径
             'class'      => Mix\Redis\Coroutine\RedisConnection::class,
             // 属性

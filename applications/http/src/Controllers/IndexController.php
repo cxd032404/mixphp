@@ -87,4 +87,40 @@ class IndexController
 
     }
 
+    public function actionShort(HttpRequestInterface $request, HttpResponseInterface $response)
+    {
+
+        $urlHead = "http://test.com/";
+        app()->response->format = HttpResponse::FORMAT_JSON;
+        $url = app()->request->get('url') ?? $urlHead;
+        echo $url."\n";
+        $url = str_replace($urlHead,"",$url);
+        $url_tail = $url;
+        echo $url."\n";
+        $url=crc32($url);
+        echo "crc_url:".$url."\n";
+        $result=sprintf("%u",$url);
+        $redis = app()->redis;
+        $tail = $this->code62($result);
+        $redis_key = $tail;
+        $redis->set($redis_key,$url_tail,86400);
+        $cache = $redis->get($redis_key);
+        return ['url'=>$urlHead.$tail,'parsed_url'=>$urlHead.$cache];
+    }
+
+    function code62($x)
+    {
+        $show='';
+        while($x>0){
+            $s=$x % 62;
+            if ($s>35){
+                $s=chr($s+61);
+            }elseif($s>9&&$s<=35){
+                $s=chr($s+55);
+            }
+            $show.=$s;
+            $x=floor($x/62);
+        }
+        return $show;
+    }
 }
