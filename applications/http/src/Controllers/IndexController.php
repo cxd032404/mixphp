@@ -82,8 +82,11 @@ class IndexController
 //        $ret2 = $db2->prepare($sql)->queryAll();
         $encypt = openssl_encrypt(json_encode($ret),'DES-ECB',"123456");
         $decypt = openssl_decrypt($encypt,'DES-ECB',"123456");
+        $redis = app()->redis;
+        $redis_key = "test_redis";
+        $r = $redis->incr($redis_key);
         return ['code' => 200, 'data' => $ret, 'data2' => $ret2,
-            'encypt'=>$encypt,'decypt'=>json_decode($decypt,true),'message' => 'OK'];
+            'encypt'=>$encypt,'decypt'=>json_decode($decypt,true),'r'=>$r,'message' => 'OK'];
 
     }
 
