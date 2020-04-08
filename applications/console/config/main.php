@@ -86,6 +86,10 @@ return [
             // 依赖引用
             'ref' => beanname(Mix\Redis\Pool\ConnectionPool::class),
         ],
+        'db_s1' => ['ref'=>'swoole_test',],
+        'db_s2' => ['ref'=>'swoole_test2',],
+        'redis' => ['ref'=>'local_redis',],
+
 
     ],
 
@@ -266,7 +270,46 @@ return [
                 ],
             ],
         ],
-
+        // 数据库
+        [
+            'name' => 'swoole_test',
+            // 类路径
+            'class'      => Mix\Database\Persistent\PDOConnection::class,
+            // 属性
+            'properties' => [
+                // 数据源格式
+                'dsn'           => env('DATABASE_DSN_T1'),
+                // 数据库用户名
+                'username'      => env('DATABASE_USERNAME'),
+                // 数据库密码
+                'password'      => env('DATABASE_PASSWORD'),
+                // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
+                'driverOptions' => [
+                    // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
+                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                ],
+            ],
+        ],
+        // 数据库
+        [
+            'name' => 'swoole_test2',
+            // 类路径
+            'class'      => Mix\Database\Persistent\PDOConnection::class,
+            // 属性
+            'properties' => [
+                // 数据源格式
+                'dsn'           => env('DATABASE_DSN_T2'),
+                // 数据库用户名
+                'username'      => env('DATABASE_USERNAME'),
+                // 数据库密码
+                'password'      => env('DATABASE_PASSWORD'),
+                // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
+                'driverOptions' => [
+                    // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
+                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                ],
+            ],
+        ],
         // redis
         [
             // 类路径
@@ -283,6 +326,24 @@ return [
                 'password' => env('REDIS_PASSWORD'),
             ],
         ],
+        // redis
+        [
+            'name'  => 'local_redis',
+            // 类路径
+            'class'      => Mix\Redis\Persistent\RedisConnection::class,
+            // 属性
+            'properties' => [
+                // 主机
+                'host'     => env('REDIS_HOST'),
+                // 端口
+                'port'     => env('REDIS_PORT'),
+                // 数据库
+                'database' => env('REDIS_DATABASE'),
+                // 密码
+                'password' => env('REDIS_PASSWORD'),
+            ],
+        ],
+
 
     ],
 
